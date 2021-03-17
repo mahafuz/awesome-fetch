@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 class App {
+	
+	use \Awesome_Fetch\Traits\Api;
+	use \Awesome_Fetch\Traits\Data;
 
 	/**
 	 * Single instance of the class
@@ -41,32 +44,56 @@ class App {
 	protected $api_data;
 
 	public function __construct() {
-		$api = new Api();
-		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-		add_action('awesome_fetch_update_data_cron_hook', [ $api,'get_data' ]);
-		$this->scheduled_update_data();
 
-		// \WP_CLI::add_command( 'awesome-fetch', function() use ($api) {
-		// 	$api::get_data();
-		// 	\WP_CLI::success( "Successfully Fetched data!" );
-		// });
+		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'register_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts' ] );
+		add_shortcode( 'awf_table', [ $this, 'awesome_fetch_shortcode' ] );
+
+		if( empty($this->get()) ) {
+			add_action( 'wp_ajax_awesome_fetch_get_data', [ $this, 'get_data' ] );
+			add_action( 'wp_ajax_nopriv_awesome_fetch_get_data', [ $this, 'get_data' ] );
+		}
 	}
 
-	public function enqueue_scripts() {
+	public function register_scripts() {
 
 		$screen = get_current_screen();
 
-		wp_register_script(
-			'awesome-fetch',
-			AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
-			'1.0.0', true
-		);
-
-		if( 'toplevel_page_awesome-fetch' === $screen->id) {
-			wp_enqueue_script( 'awesome-fetch' );
+		if( 'toplevel_page_awesome-fetch' === $screen->id && empty( $this->get() ) ) {
+			wp_enqueue_script(
+				'awesome-fetch',
+				AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
+				'1.0.0', true
+			);
+			wp_localize_script(
+				'awesome-fetch',
+				'AwesomeFetch',
+				[
+					'ajax_url' => admin_url( 'admin-ajax.php' )
+				]
+			);
 		}
 
+	}
+
+	public function frontend_scripts() {
+
+		if( empty( $this->get() ) ) {
+			wp_enqueue_script(
+				'awesome-fetch',
+				AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
+				'1.0.0', true
+			);
+
+			wp_localize_script(
+				'awesome-fetch',
+				'AwesomeFetch',
+				[
+					'ajax_url' => admin_url( 'admin-ajax.php' )
+				]
+			);
+		}
 	}
 
 	public function add_menu_page() {
@@ -82,16 +109,20 @@ class App {
 	}
 
 	public function awesome_fetch_display() {
-		echo "hello world";
+		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
 	}
 
-	/**
-	 * Check if there is a hook in the cron
-	 */
-	public function scheduled_update_data()
-	{
-		if ( ! wp_next_scheduled( 'awesome_fetch_update_data_cron_hook' ) && ! wp_installing()  ) {
-			wp_schedule_event( time(), 'hourly', 'awesome_fetch_update_data_cron_hook' );
+	public function awesome_fetch_shortcode() {
+		ob_start();
+		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
+		return ob_get_clean();
+	}
+
+	public function add_cli_commands() {
+		if ( class_exists( 'WP_CLI' ) ) {
+			\WP_CLI::add_command( 'awesome-fetch', function() {
+				\WP_CLI::success( "Successfully Fetched data!" );
+			});
 		}
 	}
 }
