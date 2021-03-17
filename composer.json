@@ -1,0 +1,15 @@
+{
+    "name": "mahafuz/awesome-fetch",
+    "authors": [
+        {
+            "name": "mahafuz",
+            "email": "m.mahfuz.me@gmail.com"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "Awesome_Fetch\\": "app"
+      }
+    },
+    "require": {}
+}
