@@ -45,7 +45,7 @@
 							$this.html("Refresh");
 							unblock($form);
 							location.reload();
-						}, 300);
+						}, 100);
 					},
 					error: function (res) {
 						console.error(res);

@@ -12,6 +12,8 @@
  * @package         Awesome_Fetch
  */
 
+use Awesome_Fetch\App;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -35,5 +37,5 @@ require_once AWF_PLUGIN_PATH . '/vendor/autoload.php';
  * @since 1.0.0
  */
 add_action( 'plugins_loaded', function () {
-	\Awesome_Fetch\App::instance();
+	App::instance();
 } );
