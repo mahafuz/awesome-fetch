@@ -10,6 +10,10 @@
 
 namespace Awesome_Fetch;
 
+use Awesome_Fetch\Traits\Api;
+use Awesome_Fetch\Traits\Cli;
+use Awesome_Fetch\Traits\Data;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -27,9 +31,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class App {
 
-	use \Awesome_Fetch\Traits\Api;
-	use \Awesome_Fetch\Traits\Data;
-	use \Awesome_Fetch\Traits\Cli;
+	use Api;
+	use Data;
+	use Cli;
 
 	/**
 	 * Single instance of the class
@@ -40,18 +44,12 @@ class App {
 	private static $instance = null;
 
 	/**
-	 * Returns single instance of the class
+	 * Contains the screen context.
 	 *
-	 * @return \App
-	 * @since 1.0.0
+	 * @access    private
+	 * @var    string
 	 */
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
+	private $context = false;
 
 	/**
 	 * Register this methods with the WordPress API
@@ -69,6 +67,20 @@ class App {
 
 		add_shortcode( 'awf_table', array( $this, 'awesome_fetch_shortcode' ) );
 		add_action( 'cli_init', array( $this, 'awf_cli_command' ) );
+	}
+
+	/**
+	 * Returns single instance of the class
+	 *
+	 * @return \App
+	 * @since 1.0.0
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**
@@ -167,7 +179,7 @@ class App {
 	 * @since    1.0.0
 	 */
 	public function awesome_fetch_display() {
-		$context_dashboard = true;
+		$this->context = 'dashboard';
 		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
 	}
 
@@ -180,6 +192,7 @@ class App {
 	public function awesome_fetch_shortcode() {
 		ob_start();
 		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
+
 		return ob_get_clean();
 	}
 }
