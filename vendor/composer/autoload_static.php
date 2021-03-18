@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInitddeb21cd470eb26fff99e21df9ddbcab
 {
     public static $prefixLengthsPsr4 = array (
+        'D' => 
+        array (
+            'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 55,
+        ),
         'A' => 
         array (
             'Awesome_Fetch\\' => 14,
@@ -14,6 +18,10 @@ class ComposerStaticInitddeb21cd470eb26fff99e21df9ddbcab
     );
 
     public static $prefixDirsPsr4 = array (
+        'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src',
+        ),
         'Awesome_Fetch\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -22,6 +30,7 @@ class ComposerStaticInitddeb21cd470eb26fff99e21df9ddbcab
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin' => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src/Plugin.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

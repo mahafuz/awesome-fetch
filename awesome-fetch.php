@@ -36,6 +36,9 @@ require_once AWF_PLUGIN_PATH . '/vendor/autoload.php';
  *
  * @since 1.0.0
  */
-add_action( 'plugins_loaded', function () {
-	App::instance();
-} );
+add_action(
+	'plugins_loaded',
+	function () {
+		App::instance();
+	}
+);

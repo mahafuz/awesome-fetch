@@ -11,5 +11,10 @@
         "Awesome_Fetch\\": "app"
       }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+      "dealerdirect/phpcodesniffer-composer-installer": "*",
+      "wp-coding-standards/wpcs": "*",
+      "phpcompatibility/phpcompatibility-wp": "*"
+    }
 }
