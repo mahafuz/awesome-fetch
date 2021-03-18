@@ -1,8 +1,6 @@
 <?php
 
 namespace Awesome_Fetch\Traits;
-
-
 trait Data {
 
 	public function get() {

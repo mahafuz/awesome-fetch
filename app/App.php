@@ -11,6 +11,7 @@ class App {
 	
 	use \Awesome_Fetch\Traits\Api;
 	use \Awesome_Fetch\Traits\Data;
+	use \Awesome_Fetch\Traits\Cli;
 
 	/**
 	 * Single instance of the class
@@ -49,28 +50,39 @@ class App {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts' ] );
 		add_shortcode( 'awf_table', [ $this, 'awesome_fetch_shortcode' ] );
+		add_action( 'wp_ajax_awesome_fetch_get_data', [ $this, 'get_data' ] );
+		add_action( 'wp_ajax_nopriv_awesome_fetch_get_data', [ $this, 'get_data' ] );
 
-		if( empty($this->get()) ) {
-			add_action( 'wp_ajax_awesome_fetch_get_data', [ $this, 'get_data' ] );
-			add_action( 'wp_ajax_nopriv_awesome_fetch_get_data', [ $this, 'get_data' ] );
-		}
+		$this->add_cli_commands();
 	}
 
 	public function register_scripts() {
 
 		$screen = get_current_screen();
 
-		if( 'toplevel_page_awesome-fetch' === $screen->id && empty( $this->get() ) ) {
+		if( 'toplevel_page_awesome-fetch' === $screen->id ) {
+			wp_enqueue_style(
+				'awesome-fetch',
+				AWF_PLUGIN_URL . 'assets/css/awesome-fetch.css', null,
+				'1.0.0', 'all'
+			);
 			wp_enqueue_script(
 				'awesome-fetch',
 				AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
+				'1.0.0', true
+			);
+			wp_enqueue_script(
+				'data-refresh',
+				AWF_PLUGIN_URL . 'assets/js/data-refresh.js', [ 'jquery' ],
 				'1.0.0', true
 			);
 			wp_localize_script(
 				'awesome-fetch',
 				'AwesomeFetch',
 				[
-					'ajax_url' => admin_url( 'admin-ajax.php' )
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'nonce'  	=> wp_create_nonce( 'awesome_fetch_nonce' ),
+					'send_request'	=> boolval(empty($this->get()))
 				]
 			);
 		}
@@ -79,21 +91,27 @@ class App {
 
 	public function frontend_scripts() {
 
-		if( empty( $this->get() ) ) {
-			wp_enqueue_script(
-				'awesome-fetch',
-				AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
-				'1.0.0', true
-			);
+		wp_enqueue_style(
+			'awesome-fetch',
+			AWF_PLUGIN_URL . 'assets/css/awesome-fetch.css', null,
+			'1.0.0', 'all'
+		);
 
-			wp_localize_script(
-				'awesome-fetch',
-				'AwesomeFetch',
-				[
-					'ajax_url' => admin_url( 'admin-ajax.php' )
-				]
-			);
-		}
+		wp_enqueue_script(
+			'awesome-fetch',
+			AWF_PLUGIN_URL . 'assets/js/awesome-fetch.js', [ 'jquery' ],
+			'1.0.0', true
+		);
+
+		wp_localize_script(
+			'awesome-fetch',
+			'AwesomeFetch',
+			[
+				'ajax_url' 	=> admin_url( 'admin-ajax.php' ),
+				'nonce'  	=> wp_create_nonce( 'awesome_fetch_nonce' ),
+				'send_request'	=> boolval(empty($this->get()))
+			]
+		);
 	}
 
 	public function add_menu_page() {
@@ -109,6 +127,7 @@ class App {
 	}
 
 	public function awesome_fetch_display() {
+		$context_dashboard = true;
 		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
 	}
 
@@ -116,13 +135,5 @@ class App {
 		ob_start();
 		include AWF_PLUGIN_PATH . 'app/views/admin-layout.php';
 		return ob_get_clean();
-	}
-
-	public function add_cli_commands() {
-		if ( class_exists( 'WP_CLI' ) ) {
-			\WP_CLI::add_command( 'awesome-fetch', function() {
-				\WP_CLI::success( "Successfully Fetched data!" );
-			});
-		}
 	}
 }
