@@ -36,6 +36,7 @@ trait Data {
 	 */
 	public function save( $data = '' ): bool {
 		return set_transient( 'awesome_fetch_data', $data, HOUR_IN_SECONDS );
+		// return set_transient( 'awesome_fetch_data', $data, 5 );
 	}
 
 	/**

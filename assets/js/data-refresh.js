@@ -33,6 +33,7 @@
 					data: {
 						action: "awesome_fetch_get_data",
 						nonce: nonce,
+						context: "refresh_data",
 					},
 					dataType: "json",
 					beforeSend: function () {

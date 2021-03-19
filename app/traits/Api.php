@@ -27,7 +27,11 @@ trait Api {
 			wp_send_json_error( __( 'Something went wrong. Nonce Issue.', 'awesome-fetch' ) );
 		}
 
-		$this->fetch_data();
+		if( boolval( empty( $this->get() ) ) || 'refresh_data' === sanitize_text_field( wp_unslash( $_GET['context'] ) ) ) {
+			return $this->fetch_data();
+		}
+
+		wp_send_json_success( __( 'Served saved data', 'awesome-fetch' ) );
 	}
 
 	/**

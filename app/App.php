@@ -119,7 +119,6 @@ class App {
 				array(
 					'ajax_url'     => admin_url( 'admin-ajax.php' ),
 					'nonce'        => wp_create_nonce( 'awesome_fetch_nonce' ),
-					'send_request' => boolval( empty( $this->get() ) ),
 				)
 			);
 		}
@@ -153,7 +152,6 @@ class App {
 			array(
 				'ajax_url'     => admin_url( 'admin-ajax.php' ),
 				'nonce'        => wp_create_nonce( 'awesome_fetch_nonce' ),
-				'send_request' => boolval( empty( $this->get() ) ),
 			)
 		);
 	}
