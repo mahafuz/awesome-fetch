@@ -26,7 +26,7 @@ A few notes about the sections above:
 
 == Installation ==
 1. Upload `awesome-fetch` to the `/wp-content/plugins/` directory
-2. Run the command `composer init`
+2. Run the command `composer install`
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Place `[awf_table]` in your pages to display the data.
 
