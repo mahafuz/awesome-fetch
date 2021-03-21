@@ -1,6 +1,14 @@
 (function () {
 	"use strict";
 
+	/***
+	 * This JS file is responsible for registering the ajax endpoint for force updating the data.
+	 *
+	 * @package Awesome_Fetch
+	 * @author Mahafuz
+	 * @since 1.0.0
+	 */
+
 	var is_blocked = function ($node) {
 		return $node.is(".processing") || $node.parents(".processing").length;
 	};

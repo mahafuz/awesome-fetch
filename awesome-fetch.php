@@ -7,7 +7,7 @@
  * Author URI:      https://github.com/mahafuz
  * Text Domain:     awesome-fetch
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         1.0.0
  *
  * @package         Awesome_Fetch
  */

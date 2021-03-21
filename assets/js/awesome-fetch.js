@@ -1,6 +1,14 @@
 (function () {
 	"use strict";
 
+	/***
+	 * This JS file is responsible for registering the ajax endpoint for fetching the data.
+	 *
+	 * @package Awesome_Fetch
+	 * @author Mahafuz
+	 * @since 1.0.0
+	 */
+
 	jQuery(function ($) {
 		$(document)
 			.on("awesome_fetch_init", function () {

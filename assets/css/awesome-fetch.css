@@ -1,3 +1,9 @@
+/***
+ * The main css file of the plugin.
+ * @author Mahafuz
+ * @since 1.0.0
+ */
+
 .awesome-fetch-header {
     display: inline-flex;
     align-items: baseline;
