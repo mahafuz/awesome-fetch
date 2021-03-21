@@ -117,8 +117,8 @@ class App {
 				'awesome-fetch',
 				'AwesomeFetch',
 				array(
-					'ajax_url'     => admin_url( 'admin-ajax.php' ),
-					'nonce'        => wp_create_nonce( 'awesome_fetch_nonce' ),
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'nonce'    => wp_create_nonce( 'awesome_fetch_nonce' ),
 				)
 			);
 		}
@@ -150,8 +150,8 @@ class App {
 			'awesome-fetch',
 			'AwesomeFetch',
 			array(
-				'ajax_url'     => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'awesome_fetch_nonce' ),
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'awesome_fetch_nonce' ),
 			)
 		);
 	}

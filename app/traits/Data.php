@@ -23,6 +23,10 @@ trait Data {
 	 * @since 1.0.0
 	 */
 	public function get() {
+		if ( empty( get_transient( 'awesome_fetch_data' ) ) ) {
+			return $this->fetch_data();
+		}
+
 		return get_transient( 'awesome_fetch_data' );
 	}
 
@@ -36,7 +40,6 @@ trait Data {
 	 */
 	public function save( $data = '' ): bool {
 		return set_transient( 'awesome_fetch_data', $data, HOUR_IN_SECONDS );
-		// return set_transient( 'awesome_fetch_data', $data, 5 );
 	}
 
 	/**
